@@ -1,0 +1,186 @@
+name: oshoorganiser
+description: A new Flutter application.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  video_player: ^0.10.9+1
+  splashscreen: ^1.2.0
+  flutter_launcher_icons: ^0.7.4
+  font_awesome_flutter: ^8.8.1
+  google_fonts: ^0.5.0+1
+  intl: ^0.16.1
+  fluttertoast: ^4.0.1
+  curved_navigation_bar: ^0.3.2
+  flutter_share_me: ^0.9.1
+  flutter_facebook_login:
+  carousel_slider: ^2.0.0
+  carousel_pro: ^1.0.0
+  google_sign_in:
+  rxdart: ^0.24.1
+  firebase_dynamic_links:
+  url_launcher:
+  firebase_auth:
+  cloud_firestore:
+  cached_network_image:
+  firebase_core:
+  groovin_widgets:
+  cloud_functions:
+  flappy_search_bar:
+  shared_preferences:
+  flutter_advanced_networkimage: ^0.7.0
+  razorpay_flutter:
+  flushbar:
+  image_cropper:
+  image_picker:
+  progress_indicators: ^0.1.5
+  toggle_switch:
+  firebase_storage:
+  http:
+  flutter:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/OshoLogo.png"
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+    - assets/images/gatewayimage.jpg
+    - assets/images/inningsBreak.jpg
+    - assets/images/referwin.jpg
+    - assets/images/exploreOyoHotels1.jpeg
+    - assets/images/explore2.jpg
+    - assets/images/explore3.jpg
+    - assets/images/explore4.jpg
+    - assets/images/Supersale.jpeg
+    - assets/images/readyForSummer.jpg
+    - assets/images/readyforsummer2.jpg
+    - assets/images/agra.jpeg
+    - assets/images/banglore.jpeg
+    - assets/images/delhi.jpeg
+    - assets/images/goa.jpeg
+    - assets/images/kolkata.jpeg
+    - assets/images/mnali.jpeg
+    - assets/images/mumbai.jpeg
+    - assets/images/musoorie.jpeg
+    - assets/images/nanital.jpg
+    - assets/images/hyedrabaad.jpeg
+    - assets/images/noida.jpeg
+    - assets/images/pune.jpeg
+    - assets/images/nearby.png
+    - assets/images/shakewin.jpeg
+    - assets/images/playwin.jpg
+    - assets/images/win.jpg
+    - assets/images/aeologic.png
+    - assets/images/superSale.png
+    - assets/images/dailySale.jpg
+    - assets/images/getRadyForSummer.jpg
+    - assets/images/offer1.jpg
+    - assets/images/offers_1.jpeg
+    - assets/images/offers_2.jpeg
+    - assets/images/wizard.png
+    - assets/images/weekend_3.jpg
+    - assets/images/goaBeach.jpg
+    - assets/images/hills.jpg
+    - assets/images/latest_1.jpg
+    - assets/images/latest_2.jpg
+    - assets/images/specials.jpg
+    - assets/images/shake_win.jpg
+    - assets/images/logo.png
+    - assets/images/powered_by.png
+    - assets/images/getaway.png
+    - assets/images/explore1.jpg
+    - assets/images/4.png
+    - assets/images/50.PNG
+    - assets/images/51.PNG
+    - assets/images/52.PNG
+    - assets/images/53.PNG
+    - assets/images/aashram.PNG
+    - assets/images/bells.PNG
+    - assets/images/hanuman.PNG
+    - assets/images/Capture.PNG
+    - assets/images/fun.jpeg
+    - assets/images/fun2.jpg
+    - assets/images/fun3.jpg
+    - assets/images/soul.jpg
+    - assets/images/medi.jpg
+    - assets/images/rafting.jpeg
+    - assets/images/r.jpg
+    - assets/images/12.jpg
+    - assets/images/oshoSplash.jpeg
+    - assets/images/drawerimage.png
+    - assets/images/OshoLogo.png
+    - assets/images/sub1.PNG
+    - assets/images/sub2.PNG
+    - assets/images/sub3.PNG
+    - assets/images/bandi.jpg
+    - assets/images/qwe.jpg
+    - assets/images/facebook.jpg
+    - assets/images/google.jpg
+    - assets/images/LoginImage.jpeg
+    - assets/images/1080p.mp4
+    - assets/images/splash.gif
+
+  #  fonts:
+  #    - family: Amita
+  #      fonts:
+  #        - asset: fonts/Amita-Regular.ttf
+  #
+  #    - family: Kurale
+  #        fonts:
+  #            - asset: fonts/Kurale-Regular.ttf
+  fonts:
+    - family: Amita
+      fonts:
+        - asset: fonts/Amita-Regular.ttf
+        - asset: fonts/Amita-Bold.ttf
+
+    - family: Kurale
+      fonts:
+        - asset: fonts/Kurale-Regular.ttf
+    - family: Raleway
+      fonts:
+        - asset: fonts/Raleway-Regular.ttf
+        - asset: fonts/Raleway-SemiBold.ttf
+
+    - family: CustomIcons
+      fonts:
+        - asset: fonts/CustomIcons.ttf
