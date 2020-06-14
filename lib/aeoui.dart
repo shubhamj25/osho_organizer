@@ -500,7 +500,7 @@ class _HomePageState extends State<HomePage> {
                     () =>
                 {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) => BookingPage()))
+                      builder: (BuildContext context) => BookingPage(email: widget.username,rememberMe: widget.rememberMe,)))
                 }),
             CustomListview(
                 Icons.subscriptions,
