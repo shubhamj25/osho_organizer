@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oshoorganiser/FollowingPage.dart';
+import 'package:oshoorganiser/MyRide.dart';
 import 'package:oshoorganiser/documentVerification.dart';
 import 'package:oshoorganiser/follwersPage.dart';
 import 'package:oshoorganiser/hisroryAndWallet.dart';
@@ -221,14 +222,14 @@ class _UserProfileUIState extends State<UserProfileUI> {
                                     color: Color.fromRGBO(253, 11, 23, 1),
                                     onPressed: () {
                                       Navigator.of(context).push(new MaterialPageRoute(
-                                          builder: (BuildContext context) => FollowerPerson()));
+                                          builder: (BuildContext context) => WalletApp(snapshot.data['email'])));
                                     },
                                     icon: Icon(
-                                      Icons.favorite,
+                                      Icons.account_balance_wallet,
                                       color: Colors.white,
                                     ),
                                     label: Text(
-                                      "Followers",
+                                      "Wallet",
                                       style: GoogleFonts.balooBhaina(
                                         color: Colors.white,
                                         fontSize: 14.0,
@@ -247,15 +248,57 @@ class _UserProfileUIState extends State<UserProfileUI> {
                                   child: FlatButton.icon(
                                     color: Color.fromRGBO(253, 11, 23, 1),
                                     onPressed: () {
-                                      Navigator.of(context).push(new MaterialPageRoute(
-                                          builder: (BuildContext context) => FollowingPerson()));
-                                    },
+                                      if(snapshot.data['name']==null){
+                                        Scaffold.of(context).showSnackBar(SnackBar(backgroundColor: deepRed,content: Row(children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Icon(Icons.error),
+                                          ),Text("Provide name to proceed",style: GoogleFonts.aBeeZee(fontSize: 14.0,fontWeight:FontWeight.w700),)
+                                        ],),));
+                                      }
+                                      else if(snapshot.data['email']==null){
+                                        Scaffold.of(context).showSnackBar(SnackBar(backgroundColor: deepRed,content: Row(children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Icon(Icons.error),
+                                          ),Text("Update email to proceed",style: GoogleFonts.aBeeZee(fontSize: 14.0,fontWeight:FontWeight.w700),)
+                                        ],),));
+                                      }
+                                      else if(snapshot.data['age']==null){
+                                        Scaffold.of(context).showSnackBar(SnackBar(backgroundColor: deepRed,content: Row(children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Icon(Icons.error),
+                                          ),Text("Set age to proceed",style: GoogleFonts.aBeeZee(fontSize: 14.0,fontWeight:FontWeight.w700),)
+                                        ],),));
+                                      }
+                                      else if(snapshot.data['gender']==null){
+                                        Scaffold.of(context).showSnackBar(SnackBar(backgroundColor: deepRed,content: Row(children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Icon(Icons.error),
+                                          ),Text("Select gender to proceed",style: GoogleFonts.aBeeZee(fontSize: 14.0,fontWeight:FontWeight.w700),)
+                                        ],),));
+                                      }
+                                      else if(snapshot.data['photoURL']==null){
+                                        Scaffold.of(context).showSnackBar(SnackBar(backgroundColor: deepRed,content: Row(children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Icon(Icons.error),
+                                          ),Text("Update profile image to proceed",style: GoogleFonts.aBeeZee(fontSize: 14.0,fontWeight:FontWeight.w700),)
+                                        ],),));
+                                      }
+                                      else{
+                                        Navigator.of(context).push(new MaterialPageRoute(
+                                            builder: (BuildContext context) => Social(userName:snapshot.data['name'],userEmail: snapshot.data['email'],age: snapshot.data['age'],gender: snapshot.data['gender'],img: snapshot.data['photoURL'],)));
+                                      }
+                                      },
                                     icon: Icon(
-                                      Icons.favorite_border,
+                                      Icons.favorite,
                                       color: Colors.white,
                                     ),
                                     label: Text(
-                                      "Following",
+                                      "Friends",
                                       style: GoogleFonts.balooBhaina(
                                         color: Colors.white,
                                         fontSize: 14.0,
@@ -271,35 +314,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                                 ),
                               ],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                FlatButton.icon(
-                                  color: Color.fromRGBO(253, 11, 23, 1),
-                                  onPressed: () {
-                                    Navigator.of(context).push(new MaterialPageRoute(
-                                        builder: (BuildContext context) => WalletApp(snapshot.data['email'])));
-                                  },
-                                  icon: Icon(
-                                    Icons.account_balance_wallet,
-                                    color: Colors.white,
-                                  ),
-                                  label: Text(
-                                    "Wallet",
-                                    style: GoogleFonts.balooBhaina(
-                                      color: Colors.white,
-                                      fontSize: 14.0,
-                                    ),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color.fromRGBO(253, 11, 23, 1),
-                                          width: 3,
-                                          style: BorderStyle.solid),
-                                      borderRadius: BorderRadius.circular(8)),
-                                ),
-                              ],
-                            ),
+
 
                           ],
                         ),
