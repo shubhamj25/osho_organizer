@@ -84,7 +84,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
       child: Material(
         child: Scaffold(
           body: StreamBuilder(
-              stream: Firestore.instance.collection("users").document("organizer").collection("users").document(widget.email).snapshots(),
+              stream: Firestore.instance.collection("users").document(widget.email).snapshots(),
               builder: (context, snapshot) {
                 return snapshot.hasData?ListView(
                   children: [
@@ -251,11 +251,11 @@ class _UserProfileUIState extends State<UserProfileUI> {
                                           builder: (BuildContext context) => FollowingPerson()));
                                     },
                                     icon: Icon(
-                                      Icons.favorite,
+                                      Icons.favorite_border,
                                       color: Colors.white,
                                     ),
                                     label: Text(
-                                      "Followers",
+                                      "Following",
                                       style: GoogleFonts.balooBhaina(
                                         color: Colors.white,
                                         fontSize: 14.0,
@@ -330,7 +330,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                                 disabledBorder: InputBorder.none,
                               ),
                               onChanged: (String val){
-                                Firestore.instance.collection("users").document("organizer").collection("users").document(widget.email).updateData({
+                                Firestore.instance.collection("users").document(widget.email).updateData({
                                   "name": val,
                                 });
                               },
@@ -355,7 +355,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                                 disabledBorder: InputBorder.none,
                               ),
                               onChanged: (String val){
-                                Firestore.instance.collection("users").document("organizer").collection("users").document(widget.email).updateData({
+                                Firestore.instance.collection("users").document(widget.email).updateData({
                                   "ashram": val,
                                 });
                               },
@@ -381,7 +381,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                                   setState(() {
                                     phoneError=false;
                                   });
-                                  Firestore.instance.collection("users").document("organizer").collection("users").document(widget.email).updateData({
+                                  Firestore.instance.collection("users").document(widget.email).updateData({
                                     "phone":value.trim()
                                   });
                                 }
@@ -426,7 +426,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                                         gender="Others";
                                       }
                                     });
-                                    Firestore.instance.collection("users").document("organizer").collection("users").document(widget.email).updateData({
+                                    Firestore.instance.collection("users").document(widget.email).updateData({
                                       "gender":gender,
                                     });
                                   },
@@ -459,7 +459,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                               ),
                               onChanged: (var val){
                                 setState(() {
-                                  Firestore.instance.collection("users").document("organizer").collection("users").document(widget.email).updateData({
+                                  Firestore.instance.collection("users").document(widget.email).updateData({
                                     "age": val,
                                   });
                                 });
@@ -496,7 +496,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                               obscureText: hidepass,
 
                               onChanged: (String val){
-                                Firestore.instance.collection("users").document("organizer").collection("users").document(widget.email).updateData({
+                                Firestore.instance.collection("users").document(widget.email).updateData({
                                   "password": val,
                                 });
                               },
@@ -522,6 +522,49 @@ class _UserProfileUIState extends State<UserProfileUI> {
                       DataRow(
                         cells: <DataCell>[
                           DataCell(Text(
+                            "Adhar No",
+                            style:
+                            TextStyle(fontWeight: FontWeight.w400, color: Colors.black),
+                          )),
+                          DataCell(Text(
+                            "${snapshot.data['adharNo']??"Unverified"}",
+                            style:
+                            TextStyle(fontWeight: FontWeight.w300, color: Colors.blue,fontSize: 16),
+                          ))
+                        ],
+                      ),
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text(
+                            "PAN No",
+                            style:
+                            TextStyle(fontWeight: FontWeight.w400, color: Colors.black),
+                          )),
+                          DataCell(Text(
+                            "${snapshot.data['panNo']??"Unverified"}",
+                            style:
+                            TextStyle(fontWeight: FontWeight.w300, color: Colors.blue,fontSize: 16),
+                          ))
+                        ],
+                      ),
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text(
+                            "Voter Id",
+                            style:
+                            TextStyle(fontWeight: FontWeight.w400, color: Colors.black),
+                          )),
+                          DataCell(Text(
+                            "${snapshot.data['voterId']??"Unverified"}",
+                            style:
+                            TextStyle(fontWeight: FontWeight.w300, color: Colors.blue,fontSize: 16),
+                          ))
+                        ],
+                      ),
+
+                      DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text(
                             "Gst No.",
                             style:
                             TextStyle(fontWeight: FontWeight.w400, color: Colors.black),
@@ -530,7 +573,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                             initialValue: "${snapshot.data['gstno']!=null?snapshot.data['gstno']:"Enter GST Number"}",
                             style: TextStyle(fontWeight: FontWeight.w300, color: !phoneError?Colors.blue:Colors.red),
                             onChanged: (String value){
-                              Firestore.instance.collection("users").document("organizer").collection("users").document(widget.email).updateData({
+                              Firestore.instance.collection("users").document(widget.email).updateData({
                                 "gstno":value.trim()
                               });
                             },
@@ -541,21 +584,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                           ),)
                         ],
                       ),
-                      snapshot.data['subscription']!=null&&snapshot.data['subscription']!=""&&(snapshot.data['subscription']=="Gold"||snapshot.data['subscription']=="Diamond"||snapshot.data['subscription']=="Silver")?
                       DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text(
-                            "Subscription",
-                            style:
-                            TextStyle(fontWeight: FontWeight.w400, color: Colors.black),
-                          )),
-                          DataCell(Text(
-                            "${snapshot.data['subscription']}",
-                            style:
-                            TextStyle(fontWeight: FontWeight.w300, color: Colors.blue,fontSize: 16),
-                          ))
-                        ],
-                      ):DataRow(
                         cells: <DataCell>[
                           DataCell(Text(
                             "Account",
@@ -563,7 +592,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                             TextStyle(fontWeight: FontWeight.w400, color: Colors.black),
                           )),
                           DataCell(Text(
-                            "Inactive",
+                            snapshot.data['activated']?"Active":"Inactive",
                             style:
                             TextStyle(fontWeight: FontWeight.w300, color: Colors.blue,fontSize: 16),
                           ))
@@ -579,7 +608,7 @@ class _UserProfileUIState extends State<UserProfileUI> {
                               onTap: (){
                                 Navigator.push(context,MaterialPageRoute(
                                   builder: (context){
-                                    return DocumentVerificationScreen();
+                                    return DocumentVerificationScreen(email:widget.email ,rememberMe: widget.rememberMe,);
                                   }
                                 ));
                               },

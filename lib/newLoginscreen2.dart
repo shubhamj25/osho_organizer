@@ -14,6 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'aeoui.dart';
 import 'package:http/http.dart'as http;
 
+import 'forgetPassword.dart';
+
 
 
 bool _rememberMe = false;
@@ -57,7 +59,7 @@ class _NewLoginScreenTwoState extends State<NewLoginScreenTwo> {
       // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("SignUp Successful"),));
       Navigator.pushReplacement(context, MaterialPageRoute(
           builder: (context){
-            return AeoUI(username: deepLink.queryParameters['email'],currentState: 4,);
+            return AeoUI(username: deepLink.queryParameters['email'],currentState: 2,);
           }
       ));
     }
@@ -69,7 +71,7 @@ class _NewLoginScreenTwoState extends State<NewLoginScreenTwo> {
             createUser(deepLink.queryParameters['name'],deepLink.queryParameters['phone'],deepLink.queryParameters['email'],deepLink.queryParameters['password'],deepLink.queryParameters['gender']);
             Navigator.pushReplacement(context, MaterialPageRoute(
                 builder: (context){
-                  return AeoUI(username: deepLink.queryParameters['email'],currentState: 4,);
+                  return AeoUI(username: deepLink.queryParameters['email'],currentState: 2,);
                 }
             ));
           }
@@ -83,13 +85,14 @@ class _NewLoginScreenTwoState extends State<NewLoginScreenTwo> {
     // final FirebaseAuth auth = FirebaseAuth.instance;
     //FirebaseUser user;
     //user=(await auth.createUserWithEmailAndPassword(email: email, password:password)).user;
-    Firestore.instance.collection("users").document("organizer").collection("users").document(email.toString()).setData({
+    Firestore.instance.collection("users").document(email.toString()).setData({
       "name":name,
       "phone":phone,
       "email":email,
       "gender":gender,
       "password":password,
       "walletBalance":0,
+      "organizer":true,
       "activated":false,
     });
   }
@@ -203,7 +206,7 @@ class _NewLoginScreenTwoState extends State<NewLoginScreenTwo> {
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('loggedInEmail', loggedInEmail);
         });
-        Firestore.instance.collection("users").document("organizer").collection("users").document("${profileData['email']}").get().then((doc){
+        Firestore.instance.collection("users").document("${profileData['email']}").get().then((doc){
           if(doc.exists){
             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
               return AeoUI(username: profileData['email'],rememberMe:_rememberMe);
@@ -215,7 +218,7 @@ class _NewLoginScreenTwoState extends State<NewLoginScreenTwo> {
               final prefs = await SharedPreferences.getInstance();
               prefs.setString('loggedInEmail', loggedInEmail);
             });
-            Firestore.instance.collection("users").document("organizer").collection("users").document("${profileData['email']}").setData({
+            Firestore.instance.collection("users").document("${profileData['email']}").setData({
               "uid":profileData['access_token'],
               "name":profileData['name'],
               "email":profileData['email'],
@@ -223,6 +226,7 @@ class _NewLoginScreenTwoState extends State<NewLoginScreenTwo> {
               "password":"oshoaashrams",
               "walletBalance":0,
               "activated":false,
+              "organizer":true,
             },merge: true);
             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
               return AeoUI(username: profileData['email'],rememberMe:_rememberMe);
@@ -398,9 +402,8 @@ class _NewLoginScreenTwoState extends State<NewLoginScreenTwo> {
                             Container(
                               alignment: Alignment.centerLeft,
                               child: FlatButton(
-                                onPressed: () {
-                                 /* Navigator.of(context).push(new MaterialPageRoute(
-                                      builder: (BuildContext context) => ForgetPassword()));*/
+                                onPressed: () {Navigator.of(context).push(new MaterialPageRoute(
+                                      builder: (BuildContext context) => ForgetPassword()));
                                 },
                                 padding: EdgeInsets.only(right: 0.0),
                                 child: Text(
@@ -456,7 +459,7 @@ class _NewLoginScreenTwoState extends State<NewLoginScreenTwo> {
                                   loggingin=true;
                                 });
                                 if(loggedInEmail!=null&&loggedInPassword!=null){
-                                  Firestore.instance.collection("users").document("organizer").collection("users").document("$loggedInEmail").get().then((doc){
+                                  Firestore.instance.collection("users").document("$loggedInEmail").get().then((doc){
                                     if(doc.exists){
                                       if(loggedInPassword==doc.data['password']){
                                         Navigator.pushReplacement(context, MaterialPageRoute(builder:(context){
@@ -485,7 +488,7 @@ class _NewLoginScreenTwoState extends State<NewLoginScreenTwo> {
                                 }
                                 else{
                                   if(_formKey.currentState.validate()){
-                                    Firestore.instance.collection("users").document("organizer").collection("users").document("${_emailController.text.trim()}").get().then((doc){
+                                    Firestore.instance.collection("users").document("${_emailController.text.trim()}").get().then((doc){
                                       if(doc.exists){
                                         if(_passwordController.text.trim()==doc.data['password']){
                                           Navigator.pushReplacement(context, MaterialPageRoute(builder:(context){
@@ -667,7 +670,7 @@ void updateUserData(FirebaseUser user) async {
   loggedInEmail=user.email;
   final prefs = await SharedPreferences.getInstance();
   prefs.setString('loggedInEmail', loggedInEmail);
-  Firestore.instance.collection("users").document("organizer").collection("users").document(user.email).get().then((value){
+  Firestore.instance.collection("users").document(user.email).get().then((value){
     if(!value.exists){
       DocumentReference ref = Firestore.instance.collection('users').document("organizer").collection("users").document(user.email);
       return ref.setData({
@@ -679,7 +682,8 @@ void updateUserData(FirebaseUser user) async {
         'lastSeen': DateTime.now(),
         "password":"oshoaashrams",
         "activated":false,
-        "walletBalance":0
+        "walletBalance":0,
+        "organizer":true,
       }, merge: true);
     }
     else

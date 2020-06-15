@@ -437,11 +437,18 @@ class _HomePageState extends State<HomePage> {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Material(
+            Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: <Color>[
+                    Colors.red,
+                    Colors.redAccent,
+                    Colors.red.shade400
+                  ])),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top:12.0),
+                    child: Material(
                       borderRadius: BorderRadius.all(Radius.circular(70)),
                       elevation: 10,
                       child: Image.asset(
@@ -450,25 +457,34 @@ class _HomePageState extends State<HomePage> {
                         height: 100,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
-                      child: Text(
-                        "OSHO BOOKINGS",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17.0),
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+                    child: Text(
+                      "Organizer",
+                      style: GoogleFonts.laBelleAurore(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0),
+                    ),
+                  ),
+                  Text(
+                    "Welcome to Osho",
+                    style: GoogleFonts.raleway(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),
+                  ),
+                  Text(
+                    "$loggedInEmail",
+                    style: GoogleFonts.raleway(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),
+                  ),
+                  SizedBox(height: 20,)
+                ],
               ),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: <Color>[
-                    Colors.red,
-                    Colors.redAccent,
-                    Colors.red.shade400
-                  ])),
             ),
             CustomListview(
                 Icons.person,
@@ -476,7 +492,7 @@ class _HomePageState extends State<HomePage> {
                     () =>
                 {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) => AeoUI()))
+                      builder: (BuildContext context) => AeoUI(currentState: 0,username: widget.username,rememberMe: widget.rememberMe,)))
                 }),
             CustomListview(
                 Icons.rate_review,
@@ -502,30 +518,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(new MaterialPageRoute(
                       builder: (BuildContext context) => BookingPage(email: widget.username,rememberMe: widget.rememberMe,)))
                 }),
-            CustomListview(
-                Icons.subscriptions,
-                "Subscriptions",
-                    () =>
-                {
-                  Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          SubscriptionMyApp()))
-                }),
-//            CustomListview(
-//                Icons.room_service,
-//                "Services",
-//                () => {
-////                      Navigator.of(context).push(
-////                          MaterialPageRoute(builder: (BuildContext) => ))
-//                    }),
-//            CustomListview(
-//                Icons.account_balance_wallet,
-//                "Wallet",
-//                () => {
-//                      Navigator.of(context).push(new MaterialPageRoute(
-//                          builder: (BuildContext context) => WalletApp()))
-//                    }),
-//            CustomListview(Icons.info_outline, "Contact Us", () => {}),
+
 
             CustomListview(
                 Icons.offline_bolt,
@@ -729,6 +722,8 @@ class _AeoUIState extends State<AeoUI> {
                     color: Color.fromRGBO(253, 11, 23, 1),
                   ),
                   title: Text("Add Events",style: GoogleFonts.balooBhai(fontSize: 15))),
+
+
               BottomNavigationBarItem(
                   icon: Icon(
                     Icons.person,
