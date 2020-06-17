@@ -23,6 +23,7 @@ environment:
 dependencies:
   video_player: ^0.10.9+1
   splashscreen: ^1.2.0
+  smooth_star_rating:
   flutter_launcher_icons: ^0.7.4
   font_awesome_flutter: ^8.8.1
   google_fonts: ^0.5.0+1

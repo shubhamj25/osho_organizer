@@ -8,7 +8,7 @@ import 'addEvents.dart';
 
 class OtherDetails extends StatefulWidget {
   final String email;
-  bool rememberMe;
+  final bool rememberMe;
   OtherDetails({this.email,this.rememberMe});
   @override
   _OtherDetailsState createState() => _OtherDetailsState();
@@ -363,30 +363,7 @@ class _OtherDetailsState extends State<OtherDetails> {
           ),
         ],
       ),
-//      bottomNavigationBar: BottomNavigationBar(
-//        currentIndex: _currentIndex,
-//        onTap: onTappedBar,
-//        items: [
-//          BottomNavigationBarItem(
-//              icon: Icon(
-//                Icons.home,
-//                color: Color.fromARGB(255, 196, 26, 61),
-//              ),
-//              title: Text("Home")),
-//          BottomNavigationBarItem(
-//              icon: Icon(
-//                Icons.card_travel,
-//                color: Color.fromARGB(255, 196, 26, 61),
-//              ),
-//              title: Text("Booking")),
-//          BottomNavigationBarItem(
-//              icon: Icon(
-//                Icons.person,
-//                color: Color.fromARGB(255, 196, 26, 61),
-//              ),
-//              title: Text("Profile")),
-//        ],
-//      ),
+
       floatingActionButton: new FloatingActionButton(
           elevation: 0.0,
           child: new Icon(Icons.send),

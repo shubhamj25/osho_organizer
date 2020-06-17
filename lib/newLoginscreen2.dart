@@ -672,7 +672,7 @@ void updateUserData(FirebaseUser user) async {
   prefs.setString('loggedInEmail', loggedInEmail);
   Firestore.instance.collection("users").document(user.email).get().then((value){
     if(!value.exists){
-      DocumentReference ref = Firestore.instance.collection('users').document("organizer").collection("users").document(user.email);
+      DocumentReference ref = Firestore.instance.collection('users').document(user.email);
       return ref.setData({
         'uid': user.uid,
         'email': user.email,
@@ -681,8 +681,8 @@ void updateUserData(FirebaseUser user) async {
         'name': user.displayName,
         'lastSeen': DateTime.now(),
         "password":"oshoaashrams",
-        "activated":false,
         "walletBalance":0,
+        "activated":false,
         "organizer":true,
       }, merge: true);
     }

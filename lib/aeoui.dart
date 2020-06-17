@@ -3,12 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oshoorganiser/eventOrganiser.dart';
+import 'package:oshoorganiser/registrationForm.dart';
 import 'package:oshoorganiser/subscriptioncallingpage.dart';
 import 'package:oshoorganiser/userProfilePafe.dart';
 import 'package:oshoorganiser/widgets/addEvents.dart';
 import 'package:oshoorganiser/widgets/custom_icons_icons.dart';
 import 'package:oshoorganiser/widgets/customshape.dart';
 import 'package:oshoorganiser/widgets/otherDetails.dart';
+import 'AshramPage.dart';
 import 'bookingforManager.dart';
 import 'constant/constant.dart';
 import 'insideHotelPage.dart';
@@ -416,7 +418,9 @@ class _HomePageState extends State<HomePage> {
     latestOyo = Constants.getLatestOyo();
     yourWallets = Constants.getYourWallet();
   }
-
+  final searchController=TextEditingController();
+  bool searchBarTap=false;
+  String searchText="^";
   @override
   Widget build(BuildContext context) {
     _height = MediaQuery
@@ -500,16 +504,16 @@ class _HomePageState extends State<HomePage> {
                     () =>
                 {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) => OtherDetails()))
+                      builder: (BuildContext context) => RegisterYourAshram(email: widget.username,rememberMe: widget.rememberMe,)))
                 }),
-            CustomListview(
+            /*CustomListview(
                 Icons.contact_mail,
                 "Organiser Registration",
                     () =>
                 {
                   Navigator.of(context).push(new MaterialPageRoute(
                       builder: (BuildContext context) => EventOrganiser()))
-                }),
+                }),*/
             CustomListview(
                 Icons.wc,
                 "Booking",
@@ -568,93 +572,149 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 bottom: PreferredSize(
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        bottom: 20,
-                        left: 20,
-                        right: 20,
-                      ),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      width: _width,
-                      height: _height / 14,
-                      alignment: Alignment.topCenter,
-                      child: TextFormField(
-                        cursorColor: Colors.grey,
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(2),
-                            prefixIcon: Icon(
-                              Icons.search,
-                              size: 30,
-                              color: Colors.grey,
-                            ),
-                            hintText: "Search for Hotel, City or Location",
-                            hintStyle: TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 13.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide.none)),
-                      ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(topRight: Radius.circular(12),topLeft: Radius.circular(12))),
+                    width: _width,
+                    height: _height / 14,
+                    alignment: Alignment.topCenter,
+                    child: TextFormField(
+                      controller: searchController,
+                      cursorColor: Colors.grey,
+                      onChanged: (val){
+                        setState(() {
+                          searchBarTap=true;
+                          searchText=val;
+                        });
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(2),
+                          suffixIcon: searchBarTap?IconButton(icon:Icon(Icons.close),onPressed: (){
+                            setState(() {
+                              searchBarTap=false;
+                              FocusScope.of(context).unfocus();
+                              searchController.clear();
+                            });
+                          },):null,
+                          prefixIcon: Icon(
+                            Icons.search,
+                            size: 30,
+                            color: Colors.grey,
+                          ),
+                          hintText: "Search for Hotel, City or Location",
+                          hintStyle: TextStyle(
+                              fontWeight: FontWeight.w300, fontSize: 13.0),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none)),
                     ),
-                    preferredSize: Size(_width, _height / 20)),
+                  ),
+                  preferredSize: Size(_width, _height / 20),
+                ),
+
               ),
             ];
           },
 
 
-          body:SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: _height / 6,
-                  child: ListView.builder(
-                      itemCount: areaLocationList.length,
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _buildLocationList(areaLocationList[index]);
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text("Live Events",style: GoogleFonts.balooBhai(fontSize: 25,color: Colors.black45),textAlign: TextAlign.center,),
-                ),
-                StreamBuilder<QuerySnapshot>(
-                    stream: Firestore.instance.collection("events").snapshots(),
-                    builder: (context, snapshot) {
-                      currentEvents.clear();
-                      if(snapshot.hasData){
-                            for(int i=0;i<snapshot.data.documents.length;i++){
-                              if(snapshot.data.documents.elementAt(i).data['email']==widget.username){
-                                currentEvents.add(LiveEventCard(snapshot.data.documents.elementAt(i).data['title'],
-                                    snapshot.data.documents.elementAt(i).data['imageUrl'],
-                                    snapshot.data.documents.elementAt(i).data['description'],
-                                    snapshot.data.documents.elementAt(i).data['location']
-                                ));
-                              }
-                            }
-                      }
-                      return snapshot.hasData ?
-                      currentEvents.isNotEmpty?Column(
-                        children:currentEvents,
-                      ):Text("No Current Live Events",style: GoogleFonts.balooBhai(fontSize: 18,color: Colors.black26),)
+          body:Stack(
+            children: <Widget>[
+              SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      height: _height / 6,
+                      child: ListView.builder(
+                          itemCount: areaLocationList.length,
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _buildLocationList(areaLocationList[index]);
+                          }),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text("Live Events",style: GoogleFonts.balooBhai(fontSize: 25,color: Colors.black45),textAlign: TextAlign.center,),
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance.collection("events").snapshots(),
+                        builder: (context, snapshot) {
+                          currentEvents.clear();
+                          if(snapshot.hasData){
+                                for(int i=0;i<snapshot.data.documents.length;i++){
+                                  if(snapshot.data.documents.elementAt(i).data['email']==widget.username){
+                                    currentEvents.add(LiveEventCard(snapshot.data.documents.elementAt(i).data['title'],
+                                        snapshot.data.documents.elementAt(i).data['imageUrl'],
+                                        snapshot.data.documents.elementAt(i).data['description'],
+                                        snapshot.data.documents.elementAt(i).data['location']
+                                    ));
+                                  }
+                                }
+                          }
+                          return snapshot.hasData ?
+                          currentEvents.isNotEmpty?Column(
+                            children:currentEvents,
+                          ):Text("No Current Live Events",style: GoogleFonts.balooBhai(fontSize: 18,color: Colors.black26),)
 
-                          :
-                      Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Container(
-                          height: 27,width: 27,
-                          child:CircularProgressIndicator(
-                            strokeWidth: 2,
-                            backgroundColor: Colors.white,
-                          ),
-                        ),
-                      );
-                    }
+                              :
+                          Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Container(
+                              height: 27,width: 27,
+                              child:CircularProgressIndicator(
+                                strokeWidth: 2,
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                          );
+                        }
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              searchBarTap?Material(
+                elevation: 12.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(bottomLeft:Radius.circular(12),bottomRight: Radius.circular(12)),
+                ),
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal:40.0,vertical: 8),
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: Firestore.instance.collection("ashrams").snapshots(),
+                          builder: (context, snapshot) {
+                            return snapshot.hasData?ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (context,index){
+                                return (snapshot.data.documents.elementAt(index).data['name'].toString().toLowerCase().contains(searchText)||snapshot.data.documents.elementAt(index).data['name'].toString().toUpperCase().contains(searchText.toLowerCase())||snapshot.data.documents.elementAt(index).data['name'].toString().contains(searchText))?
+                                InkWell(
+                                  onTap: (){
+                                    Navigator.push(context,MaterialPageRoute(
+                                      builder: (context){
+                                        return AshramPage(email:snapshot.data.documents.elementAt(index).data['email']);
+                                      }
+                                    ));
+                                    setState(() {
+                                      searchBarTap=false;
+                                      FocusScope.of(context).unfocus();
+                                      searchController.clear();
+                                    });
+                                  },
+                                  child: Text(snapshot.data.documents.elementAt(index).data['name'],
+                                    style: GoogleFonts.balooBhaina(color: Colors.grey,fontSize: 15),),
+                                ):Container();
+                              },
+                            ):Center(child: CircularProgressIndicator());
+                          }
+                      ),
+                    ),
+                  ],
+                ),
+              ):Container(),
+            ],
           )
       ),
     );
@@ -831,10 +891,10 @@ class _LiveEventCardState extends State<LiveEventCard> {
                           image: imageProvider, fit: BoxFit.cover),
                     ),
                   ),
-                  placeholder: (context, url) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical:40.0),
-                    child: Center(child: Container(height:25,width: 25,child: CircularProgressIndicator(strokeWidth: 2,backgroundColor: Colors.white,))),
-                  ),
+                  placeholder: (context, url) => Container(decoration:BoxDecoration(
+                    color: Colors.lightBlue,
+                    borderRadius: BorderRadius.only(topRight:Radius.circular(12.0),topLeft:Radius.circular(12.0)),
+                  ) ,height:175,),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
                 SizedBox(

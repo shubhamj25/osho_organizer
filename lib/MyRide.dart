@@ -763,6 +763,24 @@ class ChatCard extends StatefulWidget {
 class _ChatCardState extends State<ChatCard> {
   final _messageController=TextEditingController();
   String message;
+  bool organizer=false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Firestore.instance.collection("ashrams").document(widget.chatToEmail).get().then((doc){
+      if(doc.exists) {
+        setState(() {
+          organizer = true;
+        });
+      }
+      else{
+        setState(() {
+          organizer=false;
+        });
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -802,7 +820,7 @@ class _ChatCardState extends State<ChatCard> {
             ),
           ),
           title: Text(widget.chatToName,style: GoogleFonts.aBeeZee(fontSize: 18.0,color:Colors.cyan,fontWeight: FontWeight.w600),),
-          subtitle: Text("Osho Customer",style: GoogleFonts.aBeeZee(fontSize: 16.0,fontWeight: FontWeight.w500)),
+          subtitle: Text(organizer?"Osho Organizer":"Osho Customer",style: GoogleFonts.aBeeZee(fontSize: 16.0,fontWeight: FontWeight.w500)),
           trailing: Container(
             width: MediaQuery.of(context).size.width*0.21,
             child: Row(
@@ -827,7 +845,7 @@ class _ChatCardState extends State<ChatCard> {
                         padding: const EdgeInsets.all(5.0),
                         child: Text("$unseen",style: GoogleFonts.aBeeZee(fontSize: 14,color: Colors.white),),
                       ),
-                    ):Icon(Icons.notifications);
+                    ):Icon(organizer?Icons.live_help:Icons.notifications);
                   }
                 ),
                 IconButton(icon: Icon(Icons.delete,color: deepRed,),
