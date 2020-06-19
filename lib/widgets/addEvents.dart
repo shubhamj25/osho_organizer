@@ -374,6 +374,7 @@ class _AddEventsState extends State<AddEvents> {
                               return null;
                             }
                           },
+                          keyboardType: TextInputType.number,
                           onChanged: (val){
                             _formKey.currentState.validate();
                           },
@@ -452,7 +453,7 @@ class _AddEventsState extends State<AddEvents> {
                         if(_selectedDate!='Start'&&_selectedDateTwo!='End'&&eventImgUrl!=null){
                           if(_formKey.currentState.validate()){
                             Firestore.instance.collection("users").document(widget.email).get().then((doc){
-                              if(doc.exists){
+                              if(doc.exists&&doc.data['ashram']!=null){
                                 Firestore.instance.collection("events").document(_controller.text.trim()).setData({
                                   "title":_controller.text.trim(),
                                   "ashram":doc.data['ashram'],
@@ -467,28 +468,44 @@ class _AddEventsState extends State<AddEvents> {
                                   "email":widget.email,
                                   "reviews":[""].toList(),
                                   "postedOn":DateTime.now().toIso8601String(),
-                                },merge: true);
-                              }
-                            }).then((value){
-                              Flushbar(
-                                shouldIconPulse: true,
-                                isDismissible: true,
-                                flushbarPosition: FlushbarPosition.TOP,
-                                titleText: Text("Event Created",style: GoogleFonts.aBeeZee(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 17.0),),
-                                messageText: Text("Event has been created publicly using the entered details",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15.0)),
-                                duration: Duration(seconds: 3),
-                                icon: Icon(Icons.check_circle,color: Colors.white,),
-                                backgroundColor:  Colors.green,
-                              )..show(context).then((value){
-                                setState(() {
-                                  registering=false;
+                                },merge: true).then((value) {
+                                  Flushbar(
+                                    shouldIconPulse: true,
+                                    isDismissible: true,
+                                    flushbarPosition: FlushbarPosition.TOP,
+                                    titleText: Text("Event Created",style: GoogleFonts.aBeeZee(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 17.0),),
+                                    messageText: Text("Event has been created publicly using the entered details",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15.0)),
+                                    duration: Duration(seconds: 3),
+                                    icon: Icon(Icons.check_circle,color: Colors.white,),
+                                    backgroundColor:  Colors.green,
+                                  )..show(context).then((value){
+                                    setState(() {
+                                      registering=false;
+                                    });
+                                    Navigator.pushReplacement(context, MaterialPageRoute(
+                                        builder: (context){
+                                          return AeoUI(currentState: 0,username: widget.email,rememberMe: widget.rememberMe,);
+                                        }
+                                    ));
+                                  });
                                 });
-                                Navigator.pushReplacement(context, MaterialPageRoute(
-                                  builder: (context){
-                                    return AeoUI(currentState: 0,username: widget.email,rememberMe: widget.rememberMe,);
-                                  }
-                                ));
-                              });
+                              }
+                              else{
+                                Flushbar(
+                                  shouldIconPulse: true,
+                                  isDismissible: true,
+                                  flushbarPosition: FlushbarPosition.TOP,
+                                  titleText: Text("Profile Incomplete",style: GoogleFonts.aBeeZee(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 17.0),),
+                                  messageText: Text("Ashram Name Missing Under Profile Section",style: GoogleFonts.aBeeZee(color: Colors.white,fontSize: 15.0)),
+                                  duration: Duration(seconds: 3),
+                                  icon: Icon(Icons.error,color: Colors.white,),
+                                  backgroundColor:  deepRed,
+                                )..show(context).then((value){
+                                  setState(() {
+                                    registering=false;
+                                  });
+                                });
+                              }
                             });
                           }
                           else{

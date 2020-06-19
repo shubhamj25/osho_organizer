@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:oshoorganiser/widgets/custom_icons_icons.dart';
 import 'aeoui.dart';
 
 class HotelDetailsPage extends StatefulWidget {
@@ -80,7 +81,48 @@ class _HotelDetailsPageState extends State<HotelDetailsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(height: 180),
+                        const SizedBox(height: 100),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal:10.0),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width*0.5,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                              ),
+                              elevation: 12.0,
+                              child:  Stack(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Icon(Icons.favorite,color: deepRed,),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text("Interested",style: GoogleFonts.balooBhai(fontSize:18),),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  StreamBuilder(
+                                    stream: Firestore.instance.collection("events").document(snapshot.data['title']).snapshots(),
+                                    builder: (context, snap) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(top:30.0,left:55.0),
+                                        child: AnimatedCount(count: !snap.hasData?0:snap.data['interested'], duration:  Duration(seconds: 4)),
+                                      );
+                                    }
+                                  )
+
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text(
@@ -111,8 +153,8 @@ class _HotelDetailsPageState extends State<HotelDetailsPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: FloatingActionButton(
-                                  backgroundColor: !favourite?Colors.grey:Colors.white,
-                                  child: Icon(Icons.favorite,color: !favourite?Colors.white:Colors.red,),
+                                  backgroundColor: Colors.white,
+                                  child: Icon(Icons.event_note,color: deepRed),
                                   heroTag: 3,
                                   onPressed: ()=>null
                               ),
@@ -120,7 +162,7 @@ class _HotelDetailsPageState extends State<HotelDetailsPage> {
                           ],
                         ),
                         Container(
-                          padding: const EdgeInsets.all(32.0),
+                          padding: const EdgeInsets.all(20.0),
                           color: Colors.white,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,9 +213,9 @@ class _HotelDetailsPageState extends State<HotelDetailsPage> {
                               ),
                               const SizedBox(height: 30.0),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  RaisedButton(
+                                  /*RaisedButton(
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30.0)),
                                     color: Color.fromRGBO(253, 11, 23, 1),
@@ -231,6 +273,37 @@ class _HotelDetailsPageState extends State<HotelDetailsPage> {
                                       ));
 
                                     },
+                                  ),*/
+                                  Container(
+                                    child: Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(right:5.0),
+                                          child: Icon(Icons.event_available,color:Colors.green,size: 30,),
+                                        ),
+                                        Text(
+                                          "Start\n${snapshot.data['start']}",
+                                          style: TextStyle(fontWeight: FontWeight.normal),
+                                        ),
+                                      ],
+                                    ),
+
+                                  ),
+                                 Container(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal:5.0),
+                                          child: Icon(Icons.event_busy,color:deepRed,size: 30,),
+                                        ),
+                                        Text(
+                                          "End\n${snapshot.data['end']}",
+                                          style: TextStyle(fontWeight: FontWeight.normal),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -247,6 +320,87 @@ class _HotelDetailsPageState extends State<HotelDetailsPage> {
                                     fontWeight: FontWeight.w200,fontFamily: 'Raleway', fontSize: 18.0),
                               ),
                               const SizedBox(height: 10.0),
+                              Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(CustomIcons.place_of_worship,color:deepRed,size: 20,),
+                                  ),
+                                  Text("${snapshot.data['ashram']}",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w200,fontFamily: 'Raleway', fontSize: 18.0),
+                                  ),
+                                ],
+                              ),
+
+
+                              Row(
+                                children: <Widget>[
+                                 Padding(
+                                   padding: const EdgeInsets.all(8.0),
+                                   child: Icon(Icons.location_on,color: Colors.blueAccent,),
+                                 ),
+                                  Text("${snapshot.data['location']}",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w200,fontFamily: 'Raleway', fontSize: 18.0),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20,),
+                              Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                                ),
+                                elevation: 8,
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal:16,vertical:8.0),
+                                          child: Text("Reviews (${List.from(snapshot.data['reviews']).length-1})",style: GoogleFonts.balooBhaina(fontSize:18,color:Colors.black54),),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal:16,vertical:8.0),
+                                          child: Icon(Icons.rate_review,color: Colors.blueAccent,size: 30,),
+                                        ),
+                                      ],
+                                    ),
+                                    List.from(snapshot.data['reviews']).length!=1?Scrollbar(
+                                      isAlwaysShown: true,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal:20,vertical: 10),
+                                        child: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            maxHeight:300,
+                                          ),
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                           scrollDirection: Axis.vertical,
+                                           itemCount: List.from(snapshot.data['reviews']).length,
+                                            itemBuilder: (context,index){
+                                              return List.from(snapshot.data['reviews']).reversed.elementAt(index).toString()!=""?
+                                              ListTile(
+                                                 contentPadding: const EdgeInsets.all(0),
+                                                  trailing:Icon(Icons.account_circle,color: Colors.blueGrey,),
+                                                  title:Text("${List.from(snapshot.data['reviews']).reversed.elementAt(index).toString()}",
+                                                    style: GoogleFonts.aBeeZee(fontSize:16),
+                                                  ),
+                                              ):Container();
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ):Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Text("No reviews yet",style: GoogleFonts.balooBhai(fontSize: 16,color: Colors.grey),),
+                                    )
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -274,5 +428,37 @@ class _HotelDetailsPageState extends State<HotelDetailsPage> {
         ),
       ),
     );
+  }
+}
+
+
+class AnimatedCount extends ImplicitlyAnimatedWidget {
+  final int count;
+
+  AnimatedCount({
+    Key key,
+    @required this.count,
+    @required Duration duration,
+    Curve curve = Curves.linear
+  }) : super(duration: duration, curve: curve, key: key);
+
+  @override
+  ImplicitlyAnimatedWidgetState<ImplicitlyAnimatedWidget> createState() => _AnimatedCountState();
+}
+
+class _AnimatedCountState extends AnimatedWidgetBaseState<AnimatedCount> {
+  IntTween _count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: new Text(_count.evaluate(animation).toString(),style:GoogleFonts.aBeeZee(fontSize: 16),textAlign: TextAlign.center,),
+    );
+  }
+
+  @override
+  void forEachTween(TweenVisitor visitor) {
+    _count = visitor(_count, widget.count, (dynamic value) => new IntTween(begin: value));
   }
 }
